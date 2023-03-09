@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/index.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="app">
+      <div class="chat-body">
+        <div class="left">
+          <p>Select 1 to place an order</p>
+          <p>Select 99 to checkout order</p>
+          <p>Select 98 to see order history</p>
+          <p>Select 97 to see current order</p>
+          <p>Select 0 to cancel order</p>
+        </div>
+        <% for (var i = 0; i < messageData.length; i++ ) { %> <%
+        if(messageData[i].senderType === "user") {%>
+        <div class="right">
+          <p><%= messageData[i].message %></p>
+        </div>
+        <% } %> <% } %>
+      </div>
+      <div class="send-message-container">
+        <form>
+          <input id="message-input" type="text" placeholder="Enter Request" />
+          <button class="send-btn">Send</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/scripts/api.js"></script>
+  <script type="module" src="/scripts/index.js"></script>
+</html>
