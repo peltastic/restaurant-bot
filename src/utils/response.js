@@ -14,37 +14,37 @@ const response = [
     type: 2,
     response:
       "You've selected a donut, select from the options if you want to order more",
-    saveToDb: "Donut x1",
+    saveToDb: "Donut",
   },
   {
     type: 3,
     response:
       "You've selected a serving of Pepper Soup, select from the options if you want to order more",
-    saveToDb: "Pepper Soup x1",
+    saveToDb: "Pepper Soup",
   },
   {
     type: 4,
     response:
       "You've selected a pack of Yoghurt, select from the options if you want to order more",
-    saveToDb: "Yoghurt x1",
+    saveToDb: "Yoghurt",
   },
   {
     type: 5,
     response:
       "You've selected a pack of Ice Cream, select from the options if you want to order more",
-    saveToDb: "Ice Cream x1",
+    saveToDb: "Ice Cream",
   },
   {
     type: 6,
     response:
       "You've selected a bottle of soda, select from the options if you want to order more",
-    saveToDb: "Soda x1",
+    saveToDb: "Soda",
   },
   {
     type: 7,
     response:
       "You've selected a serving of chicken, select from the options if you want to order more",
-    saveToDb: "Chicken x1",
+    saveToDb: "Chicken",
   },
 
   {
@@ -59,6 +59,9 @@ const response = [
 ];
 
 function getResponse(inputType) {
+  if (Number(inputType) === 98) {
+    return
+  }
   const res = response.filter((el) => el.type === Number(inputType));
   return {
     response: res[0].response,

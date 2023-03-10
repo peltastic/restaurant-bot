@@ -4,7 +4,9 @@ const socket = require("socket.io");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const messageRoutes = require("./routes/messages.routes");
+const orderRoutes = require("./routes/orders.routes")
 const getResponse = require("./utils/response")
+
 
 dotenv.config();
 
@@ -33,6 +35,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(messageRoutes);
+app.use("/order", orderRoutes)
 
 app.use("*", (req, res) => {
   return res.render("404");
@@ -44,7 +47,9 @@ const server = app.listen(PORT, () => {
 
 const io = socket(server);
 
+
 io.on("connection", (socket) => {
+  global.socket = socket
   console.log("user connected");
   socket.on("send message", (msg) => {
     const response = getResponse(msg)
