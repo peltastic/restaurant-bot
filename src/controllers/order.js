@@ -30,7 +30,6 @@ const addOrder = async (req, res) => {
 const getOrders = async (req, res) => {
   const {userId} = req.params;
   const orders = await OrderModel.findOne({ userId });
-  console.log(orders)
   const orderItemsOccurenceObj = {};
   const result = []
   for (let a = 0; a < orders?.item.length; a++) {
@@ -41,9 +40,8 @@ const getOrders = async (req, res) => {
       orderItemsOccurenceObj[b] = 1;
     }
   }
-  console.log(orderItemsOccurenceObj)
   for (const item in orderItemsOccurenceObj) {
-    result.push(`${item} X${orderItemsOccurenceObj[item]}`)
+    result.push(`${item} x${orderItemsOccurenceObj[item]}`)
   }
   socket.emit("order history", result)
   return res.status(200).send("orders retrieved")

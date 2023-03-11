@@ -59,8 +59,8 @@ const response = [
 ];
 
 function getResponse(inputType) {
-  if (Number(inputType) === 98) {
-    return
+  if (Number(inputType) === 98 || Number(inputType) === 97) {
+    return;
   }
   const res = response.filter((el) => el.type === Number(inputType));
   return {

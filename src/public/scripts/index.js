@@ -6,18 +6,94 @@ const chatBody = document.querySelector(".chat-body");
 
 let inputValue;
 const orders = [];
+const allowedInputs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 97, 98, 99];
 
 let senderId = localStorage.getItem("senderId");
-function showMessage(value) {
+
+function appendChat(textContent, position) {
   const fragment = document.createDocumentFragment();
   const messageEl = fragment
     .appendChild(document.createElement("div"))
     .appendChild(document.createElement("p"));
-  messageEl.parentElement.className = "right";
-  messageEl.textContent = value;
+  messageEl.parentElement.className = position;
+  messageEl.textContent = textContent;
 
   chatBody.appendChild(fragment);
   chatBody.scrollTo(0, chatBody.scrollHeight);
+  // input.value = ""
+}
+
+function ordersFeed(data, type) {
+  let feed = data;
+  const div = document.createElement("div");
+  div.className = "left";
+  const heading = document.createElement("h2");
+  heading.textContent = type === "current" ? "Current Orders" : "ORDER HISTORY";
+  heading.className = "space-below";
+  div.appendChild(heading);
+
+  if (type === "current") {
+    feed = [];
+    const orderItemsOccurenceObj = {};
+    for (let a = 0; a < data.length; a++) {
+      const b = data[a];
+      if (orderItemsOccurenceObj[b]) {
+        orderItemsOccurenceObj[b] += 1;
+      } else {
+        orderItemsOccurenceObj[b] = 1;
+      }
+    }
+    for (const item in orderItemsOccurenceObj) {
+      feed.push(`${item} x${orderItemsOccurenceObj[item]}`);
+    }
+  }
+  if (feed.length === 0) {
+    const p = document.createElement("p");
+    p.textContent = "No orders Placed yet";
+    div.appendChild(p);
+  } else {
+    for (const el of feed) {
+      const p = document.createElement("p");
+      p.textContent = el;
+      div.appendChild(p);
+    }
+  }
+  chatBody.appendChild(div);
+  chatBody.scrollTo(0, chatBody.scrollHeight);
+}
+
+function validator(inputValue) {
+  const rightchats = document.querySelectorAll(".right");
+  const inputIsAllowed = allowedInputs.find((el) => el === Number(inputValue));
+  console.log(inputIsAllowed);
+  if (!inputIsAllowed) {
+    return;
+  }
+  if (Number(inputValue) === 98) {
+    appendChat(inputValue, "right");
+    getOrderHistory();
+    return;
+  }
+  if (Number(inputValue) === 97) {
+    appendChat(inputValue, "right");
+    ordersFeed(orders, "current");
+    return;
+  }
+  if (Number(inputValue) > 1 && Number(inputValue) < 8 && !rightchats[0]) {
+    return;
+  }
+  if (
+    (Number(inputValue) === 0 || Number(inputValue) === 99) &&
+    !rightchats[1]
+  ) {
+    return;
+  }
+
+  if (Number(inputValue) === 99 && orders.length > 0) {
+    checkoutOrder(orders);
+    return true;
+  }
+  return true;
 }
 
 sendBtn.addEventListener("click", (e) => {
@@ -25,26 +101,12 @@ sendBtn.addEventListener("click", (e) => {
   // sendMessage(inputValue, senderId, "user");
   if (input.value) {
     inputValue = input.value;
-    const rightchats = document.querySelectorAll(".right");
-    if (Number(input.value) === 98) {
-      showMessage(input.value);
-      getOrderHistory()
-      return
-    }
-    if (Number(input.value) > 1 && Number(input.value) < 8 && !rightchats[0]) {
+    const shouldContinue = validator(input.value);
+    if (!shouldContinue) {
       return;
     }
-    if (
-      (Number(input.value) === 0 || Number(input.value) === 99) &&
-      !rightchats[1]
-    ) {
-      return;
-    }
-    
-    if (Number(input.value) === 99 && orders.length > 0) {
-      checkoutOrder(orders);
-    }
-    showMessage(input.value);
+
+    appendChat(input.value, "right");
 
     socket.emit("send message", input.value);
   }
@@ -57,40 +119,20 @@ socket.on("bot response", (response) => {
   if (typeof response.response === "object") {
     const div = document.createElement("div");
     div.className = "left";
+
     for (const el of response.response) {
       const p = document.createElement("p");
       p.textContent = el;
       div.appendChild(p);
     }
+
     chatBody.appendChild(div);
+    chatBody.scrollTo(0, chatBody.scrollHeight);
     return;
   }
-  const rightfragment = document.createDocumentFragment();
-  const rightMessageEl = rightfragment
-    .appendChild(document.createElement("div"))
-    .appendChild(document.createElement("p"));
-  rightMessageEl.parentElement.className = "left";
-  rightMessageEl.textContent = response.response;
-  chatBody.appendChild(rightfragment);
-  chatBody.scrollTo(0, chatBody.scrollHeight);
+  appendChat(response.response, "left");
 });
 
-
-socket.on("order history", response => {
-  ordersFeed(response, "")
-})
-
-function ordersFeed (data, type) {
-  const div = document.createElement("div");
-  div.className = "left";
-  const heading = document.createElement("h1");
-  heading.textContent = type === "current" ? "Current Orders" : "ORDER HISTORY"
-  heading.className = "space-below"
-  div.appendChild(heading)
-  for (const el of data) {
-    const p = document.createElement("p");
-    p.textContent = el;
-    div.appendChild(p);
-  }
-  chatBody.appendChild(div);
-}
+socket.on("order history", (response) => {
+  ordersFeed(response, "");
+});

@@ -5,30 +5,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;800;900&display=swap"
+      rel="stylesheet"
+    />
     <title>Document</title>
   </head>
   <body>
     <div class="app">
-      <div class="chat-body">
-        <div class="left">
-          <p>Select 1 to place an order</p>
-          <p>Select 99 to checkout order</p>
-          <p>Select 98 to see order history</p>
-          <p>Select 97 to see current order</p>
-          <p>Select 0 to cancel order</p>
+      <div class="header">
+        <div class="title">
+          <h1>RESTAURANT CHATBOT</h1>
+          <h3>Order Your meals through the chat client</h3>
         </div>
-        <% for (var i = 0; i < messageData.length; i++ ) { %> <%
-        if(messageData[i].senderType === "user") {%>
-        <div class="right">
-          <p><%= messageData[i].message %></p>
-        </div>
-        <% } %> <% } %>
       </div>
-      <div class="send-message-container">
-        <form>
-          <input id="message-input" type="text" placeholder="Enter Request" />
-          <button class="send-btn">Send</button>
-        </form>
+      <div class="chat-interface">
+        <div class="chat-body">
+          <div class="left">
+            <p>Select 1 to place an order</p>
+            <p>Select 99 to checkout order</p>
+            <p>Select 98 to see order history</p>
+            <p>Select 97 to see current order</p>
+            <p>Select 0 to cancel order</p>
+          </div>
+          <% for (var i = 0; i < messageData.length; i++ ) { %> <%
+          if(messageData[i].senderType === "user") {%>
+          <div class="right">
+            <p><%= messageData[i].message %></p>
+          </div>
+          <% } %> <% } %>
+        </div>
+        <div class="send-message-container">
+          <form>
+            <input id="message-input" type="text" placeholder="Enter Request" />
+            <button class="send-btn">
+              <img src="/assets/send.png" alt="send-icon" />
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </body>
