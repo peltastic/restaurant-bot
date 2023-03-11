@@ -31,7 +31,7 @@ app.use(function (err, req, res, next) {
 connectDB();
 
 app.get("/", (req, res) => {
-  return res.render("loading");
+  return res.render("index");
 });
 
 app.use(messageRoutes);

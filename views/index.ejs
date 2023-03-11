@@ -30,12 +30,6 @@
             <p>Select 97 to see current order</p>
             <p>Select 0 to cancel order</p>
           </div>
-          <% for (var i = 0; i < messageData.length; i++ ) { %> <%
-          if(messageData[i].senderType === "user") {%>
-          <div class="right">
-            <p><%= messageData[i].message %></p>
-          </div>
-          <% } %> <% } %>
         </div>
         <div class="send-message-container">
           <form>
@@ -48,6 +42,15 @@
       </div>
     </div>
   </body>
+  <script type="module">
+    import { v4 as uuidv4 } from "https://jspm.dev/uuid";
+
+    let senderId = localStorage.getItem("senderId");
+    if (!senderId) {
+      localStorage.setItem("senderId", uuidv4());
+      senderId = localStorage.getItem("senderId");
+    }
+  </script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/scripts/api.js"></script>
   <script src="/scripts/index.js"></script>
