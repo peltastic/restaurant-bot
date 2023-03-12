@@ -47,12 +47,10 @@ input {
 @media (max-width: 600px) {
     .chat-interface {
         flex: 0 0 100%;
-        height: 85vh;
     }
     .header {
         flex: 0 0 100%;
         padding: 1rem 2rem;
-        height: 15vh;
     }
 }
 
