@@ -3,7 +3,6 @@ const path = require("path");
 const socket = require("socket.io");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const messageRoutes = require("./routes/messages.routes");
 const orderRoutes = require("./routes/orders.routes")
 const getResponse = require("./utils/response")
 
@@ -34,7 +33,6 @@ app.get("/", (req, res) => {
   return res.render("index");
 });
 
-app.use(messageRoutes);
 app.use("/order", orderRoutes)
 
 app.use("*", (req, res) => {

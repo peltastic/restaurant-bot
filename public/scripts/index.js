@@ -20,8 +20,8 @@ function appendChat(textContent, position) {
 
   chatBody.appendChild(fragment);
   chatBody.scrollTo(0, chatBody.scrollHeight);
-  // input.value = ""
 }
+
 
 function ordersFeed(data, type) {
   let feed = data;
@@ -65,8 +65,8 @@ function ordersFeed(data, type) {
 function validator(inputValue) {
   const rightchats = document.querySelectorAll(".right");
   const inputIsAllowed = allowedInputs.find((el) => el === Number(inputValue));
-  console.log(inputIsAllowed);
   if (!inputIsAllowed) {
+    appendChat("Invalid Input", "left")
     return;
   }
   if (Number(inputValue) === 98) {
@@ -80,17 +80,20 @@ function validator(inputValue) {
     return;
   }
   if (Number(inputValue) > 1 && Number(inputValue) < 8 && !rightchats[0]) {
+    appendChat("Invalid Input", "left")
     return;
   }
   if (
     (Number(inputValue) === 0 || Number(inputValue) === 99) &&
     !rightchats[1]
-  ) {
+    ) {
+      appendChat("Invalid! Make an order first", "left")
     return;
   }
-
+  
   if (Number(inputValue) === 99 && orders.length > 0) {
     checkoutOrder(orders);
+    orders  = []
     return true;
   }
   return true;
@@ -103,12 +106,14 @@ sendBtn.addEventListener("click", (e) => {
     inputValue = input.value;
     const shouldContinue = validator(input.value);
     if (!shouldContinue) {
+      input.value = ""
       return;
     }
 
     appendChat(input.value, "right");
-
+    
     socket.emit("send message", input.value);
+    input.value = ""
   }
 });
 

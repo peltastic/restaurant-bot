@@ -37,6 +37,7 @@ input {
   align-items: center;
 }
 .chat-interface {
+  height: 100%;
   flex: 0 0 60%;
   position: relative;
   background-color: #161616;
@@ -108,6 +109,12 @@ p {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+@media (max-width: 600px) {
+  .send-message-container {
+    position: fixed;
+  }
 }
 
 .send-btn {
