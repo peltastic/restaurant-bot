@@ -1,11 +1,9 @@
 const config = require("./config");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv")
-dotenv.config()
 
 function connectDB() {
   mongoose
-    .connect(process.env.MONGO_URI, {
+    .connect(config.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
@@ -13,7 +11,6 @@ function connectDB() {
       console.log("DB Connetion Successfull");
     })
     .catch((err) => {
-    console.log(process.env.MONGO_URI)
       console.log(err.message);
     });
 }
