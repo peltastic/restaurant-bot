@@ -109,11 +109,11 @@ p {
   width: 100%;
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .send-message-container {
     position: fixed;
   }
-}
+} */
 
 .send-btn {
   position: absolute;
