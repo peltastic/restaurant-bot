@@ -5,7 +5,7 @@ const input = document.querySelector("#message-input");
 const chatBody = document.querySelector(".chat-body");
 
 let inputValue;
-const orders = [];
+let orders = [];
 const allowedInputs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 97, 98, 99];
 
 let senderId = localStorage.getItem("senderId");
@@ -21,7 +21,6 @@ function appendChat(textContent, position) {
   chatBody.appendChild(fragment);
   chatBody.scrollTo(0, chatBody.scrollHeight);
 }
-
 
 function ordersFeed(data, type) {
   let feed = data;
@@ -65,8 +64,8 @@ function ordersFeed(data, type) {
 function validator(inputValue) {
   const rightchats = document.querySelectorAll(".right");
   const inputIsAllowed = allowedInputs.find((el) => el === Number(inputValue));
-  if (!inputIsAllowed) {
-    appendChat("Invalid Input", "left")
+  if (!(inputIsAllowed + 1)) {
+    appendChat("Invalid Input", "left");
     return;
   }
   if (Number(inputValue) === 98) {
@@ -80,21 +79,24 @@ function validator(inputValue) {
     return;
   }
   if (Number(inputValue) > 1 && Number(inputValue) < 8 && !rightchats[0]) {
-    appendChat("Invalid Input", "left")
+    appendChat("Invalid Input", "left");
     return;
   }
   if (
     (Number(inputValue) === 0 || Number(inputValue) === 99) &&
     !rightchats[1]
-    ) {
-      appendChat("Invalid! Make an order first", "left")
+  ) {
+    appendChat("Invalid! Make an order first", "left");
     return;
   }
-  
+
   if (Number(inputValue) === 99 && orders.length > 0) {
     checkoutOrder(orders);
-    orders  = []
+    orders = [];
     return true;
+  }
+  if (Number(inputValue) === 0) {
+    orders = []
   }
   return true;
 }
@@ -106,14 +108,14 @@ sendBtn.addEventListener("click", (e) => {
     inputValue = input.value;
     const shouldContinue = validator(input.value);
     if (!shouldContinue) {
-      input.value = ""
+      input.value = "";
       return;
     }
 
     appendChat(input.value, "right");
-    
+
     socket.emit("send message", input.value);
-    input.value = ""
+    // input.value = ""
   }
 });
 
@@ -133,9 +135,11 @@ socket.on("bot response", (response) => {
 
     chatBody.appendChild(div);
     chatBody.scrollTo(0, chatBody.scrollHeight);
+    input.value = "";
     return;
   }
   appendChat(response.response, "left");
+  input.value = "";
 });
 
 socket.on("order history", (response) => {
